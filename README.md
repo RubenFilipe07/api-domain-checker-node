@@ -1,7 +1,7 @@
 # api-domain-checker-node
 
 <h3>About:</h3>
-<p>An api that makes a web scraper on the <a href="whois.com">whois.com</a> site to obtain data about the requested domain</p>
+<p>An api that makes a web scraper on the <a href="https://whois.com">whois.com</a> site to obtain data about the requested domain</p>
 
 <h3>How to run?</h3>
 <ol>
