@@ -19,30 +19,32 @@ app.get('/api/:domainName', async (req, res) => {
     await page.goto('https://www.whois.com/whois/' + domain);
 
 
-    const rawData = await page.evaluate(() => {
-        const data = document.querySelector('.df-raw') === null ? null ?  isNull(document.querySelector('.whois_errorbox')) : "Invalid" : document.querySelector('.df-raw').innerText
-        return data;
+    const { data, valid } = await page.evaluate(() => {
+        const data = document.querySelector('.df-raw') === null ? null : document.querySelector('.df-raw').innerText;
+        const valid = document.querySelector('.whois_errorbox') === null ? true : false;
+        return { data, valid };
     });
 
     await browser.close();
 
-    const available = isNull(rawData);
+    const available = isNull(data);
 
-    rawData === "Invalid" ? res.send({"data": "Invalid domain"}) : 
+    valid ?
         res.send({
-                "domain": domain,
-                "available": available,
-                "data": available ? "No data" : {
-                    "domainName": rawData.includes("Domain Name:") ? rawData.split("Domain Name:")[1].split("Registry Domain ID:")[0].trim() : "No data",
-                    "registryDomainId": rawData.includes("Registry Domain ID:") ? rawData.split("Registry Domain ID:")[1].split("Registrar WHOIS Server:")[0].trim() : "No data",
-                    "creationDate": rawData.includes("Creation Date:") ? rawData.split("Creation Date:")[1].split("\n")[0].trim() : "No data",
-                    "expirationDate": rawData.includes("Registry Expiry Date:") ? rawData.split("Registry Expiry Date:")[1].split("\n")[0].trim() : rawData.includes("Registrar Registration Expiration Date:") ?  rawData.split("Registrar Registration Expiration Date:")[1].split("\n")[0].trim() :  "No data",
-                    "updatedDate": rawData.includes("Updated Date:") ? rawData.split("Updated Date:")[1].split("Creation Date:")[0].trim() : "No data",
-                    "country": rawData.includes("Country:") ? rawData.split("Country:")[1].split("\n")[0].trim() : "No data",
-                    "registrar": rawData.includes("Registrar URL:") ? rawData.split("Registrar URL:")[1].split("Updated Date:")[0].trim() : "No data",
-                },
-                "rawData": available ? "No data" : rawData
-            });
-    });
+            "domain": domain,
+            "available": available,
+            "valid": valid,
+            "data": available ? "No data" : {
+                "domainName": data.includes("Domain Name:") ? data.split("Domain Name:")[1].split("Registry Domain ID:")[0].trim() : "No data",
+                "registryDomainId": data.includes("Registry Domain ID:") ? data.split("Registry Domain ID:")[1].split("Registrar WHOIS Server:")[0].trim() : "No data",
+                "creationDate": data.includes("Creation Date:") ? data.split("Creation Date:")[1].split("\n")[0].trim() : "No data",
+                "expirationDate": data.includes("Registry Expiry Date:") ? data.split("Registry Expiry Date:")[1].split("\n")[0].trim() : data.includes("Registrar Registration Expiration Date:") ? data.split("Registrar Registration Expiration Date:")[1].split("\n")[0].trim() : "No data",
+                "updatedDate": data.includes("Updated Date:") ? data.split("Updated Date:")[1].split("Creation Date:")[0].trim() : "No data",
+                "country": data.includes("Country:") ? data.split("Country:")[1].split("\n")[0].trim() : "No data",
+                "registrar": data.includes("Registrar URL:") ? data.split("Registrar URL:")[1].split("Updated Date:")[0].trim() : "No data",
+            },
+            "rawData": available ? "No data" : data
+        }) : res.send({ "data": "Invalid domain", "valid": valid, data: "No data", "rawData": "No data" });
+});
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
