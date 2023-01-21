@@ -1,0 +1,15 @@
+{
+  "name": "api-domain-checker",
+  "version": "1.0.0",
+  "description": "An api that makes a web scraper on the whois.com site to obtain data about the requested domain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "puppeteer": "^19.5.2"
+  }
+}
