@@ -15,7 +15,7 @@ app.get('/api/:domainName', async (req, res) => {
         headless: true,
     });
     const page = await browser.newPage();
-    const domain = req.params.domainName;
+    const domain = req.params.domainName.toLowerCase();
     await page.goto('https://www.whois.com/whois/' + domain);
 
 
