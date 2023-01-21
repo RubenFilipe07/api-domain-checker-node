@@ -13,7 +13,7 @@
 
 <h3>Demo:</h3>
 
-![image](https://user-images.githubusercontent.com/53026536/213844426-7921bbbf-d8f3-4aed-bcb4-d4b4b8e992de.png)
+![image](https://user-images.githubusercontent.com/53026536/213845951-22664a87-ae97-4c88-9bcd-70a9399b5697.png)
 
 <h3>Technologies used:</h3>
 
